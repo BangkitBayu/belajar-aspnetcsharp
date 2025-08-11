@@ -1,17 +1,33 @@
-﻿@page
+@page
+@functions {
+    public int hitungTotalHargaBarang(int jumlahBarang, int hargaPerSatuan, int diskon)
+    {
+        int hargaSebelumDiskon = jumlahBarang * hargaPerSatuan;
+        int hargaDiskon = hargaSebelumDiskon * diskon / 100;
+        return hargaSebelumDiskon - hargaDiskon;
+    }
+}
 @{
-    string nama = "";
-    string alamat = "";
-    int umur = 0;
-    string nomorHp = "";
+
+
+    string namaBarang = "";
+    string kategoriBarang = "";
+    int jumlahBarang = 0;
+    string satuan = "";
+    int hargaPerSatuan = 0;
+    int diskon = 0;
+    int totalHargaBarang = 0;
     bool adaInput = false;
 
     if (Request.Method == "POST")
     {
-        nama = Request.Form["nama"];
-        alamat = Request.Form["alamat"];
-        umur = int.TryParse(Request.Form["umur"], out int u) ? u : 0;
-        nomorHp = Request.Form["nomorHp"];
+        namaBarang = Request.Form["namaBarang"];
+        kategoriBarang = Request.Form["kategoriBarang"];
+        jumlahBarang = int.TryParse(Request.Form["jumlahBarang"], out int j) ? j : 0;
+        satuan = Request.Form["satuan"];
+        hargaPerSatuan = int.TryParse(Request.Form["hargaPerSatuan"], out int h) ? h : 0;
+        diskon = int.TryParse(Request.Form["diskon"], out int d) ? d : 0;
+        totalHargaBarang = @hitungTotalHargaBarang(jumlahBarang, hargaPerSatuan, diskon);
         adaInput = true;
     }
 }
@@ -22,68 +38,108 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../public/style/style.css">
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        input,
-        textarea {
-            padding: 5px;
+        h3 {
+            color: #604FDD;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input {
+            outline: none;
+            border: 2px solid rgb(189, 189, 189);
+            border-radius: 5px;
+            padding: 0.5rem;
             width: 300px;
         }
 
-        button {
-            padding: 8px 15px;
-            background: #007ACC;
-            color: white;
-            border: none;
-            cursor:
-                pointer;
+        .inputContainer {
+            display: flex;
+            gap: 10px;
         }
 
-        button:hover {
-            background: #005a9e;
+        button {
+            color: white;
+            padding: 10px 50px;
+            outline: none;
+            border: none;
+            background-color: #604FDD;
+            border-radius: 5px;
         }
     </style>
-    <title>Form Input Data Diri</title>
+    <title>Form Input Barang</title>
 </head>
 
 <body>
-    <h2>Form Input Data Diri</h2>
-    <form action="" method="post">
-        <div style="margin-bottom : 10px;">
-            <label for="">Nama</label><br>
-            <input type="text" name="nama" value="@nama" required>
-        </div>
+    <section style="display:flex; flex-direction: column; justify-content: center; align-items: center; padding:50px;">
+        <h3>Form Input Barang By Bangkit Bayu</h3>
+        <form action="" method="post" autocomplete="on"
+            style="display: flex; flex-direction:column; justify-content: center; align-items: center; gap:1rem;">
 
-        <div style="margin-bottom : 10px;">
-            <label for="">Alamat:</label><br>
-            <textarea name="alamat" rows="3" required>@alamat</textarea>
-        </div>
-        <div style="margin-bottom : 10px;">
-            <label for="">Umur:</label><br>
-            <input type="number" name="umur" value="@umur" required>
-        </div>
+            <div class="inputContainer" style="">
+                <label for="">Nama barang:</label><br>
+                <input type="text" name="namaBarang" value="@namaBarang" placeholder="Masukkan nama barang" required>
+            </div>
 
-        <div style="margin-bottom : 10px;">
-            <label for="">Nomor HP:</label><br>
-            <input type="text" name="nomorHp" value="@nomorHp" required>
-        </div>
+            <div class="inputContainer">
+                <label for="">Kategori barang:</label><br>
+                <input type="text" name="kategoriBarang" value="@kategoriBarang" placeholder="Masukkan kategori barang"
+                    required>
+            </div>
 
-        <button type="submit">Kirim</button>
-    </form>
+            <div class="inputContainer">
+                <label for="">Jumlah barang:</label><br>
+                <input type="number" name="jumlahBarang" value="@jumlahBarang" placeholder="Masukkan jumlah barang"
+                    required>
+            </div>
 
-    @if (adaInput)
-    {
-        <hr />
-        <h3>Data yang Anda Masukkan:</h3>
-        <p>Nama: @nama</p>
-        <p>Alamat: @alamat</p>
-        <p>Umur: @umur</p>
-        <p>Nomor HP: @nomorHp</p>
-    }
+            <div class="inputContainer">
+                <label for="">Satuan barang:</label><br>
+                <input type="text" name="satuan" value="@satuan" placeholder="Masukkan satuan barang" required>
+            </div>
+            <div class="inputContainer">
+                <label for="">Harga per satuan barang:</label><br>
+                <input type="number" name="hargaPerSatuan" value="@hargaPerSatuan"
+                    placeholder="Masukkan harga per satuan barang" required>
+            </div>
+
+            <div class="inputContainer">
+                <label for="">Diskon Barang :</label><br>
+                <input type="number" name="diskon" value="@diskon" placeholder="Masukkan diskon barang" required>
+            </div>
+
+            <button id="btn" type="submit">Kirim</button>
+        </form>
+
+        @if (adaInput)
+        {
+            <div style="text-align:left;">
+                <hr />
+                <h3>Data Barang yang Anda Masukkan:</h3>
+                <p style="font-weight:bold;">Nama barang: <span style="font-weight:normal;"> @namaBarang</span></p>
+                <p style="font-weight:bold;">Kategori barang: <span style="font-weight:normal;">@kategoriBarang</span> </p>
+                <p style="font-weight:bold;">Jumlah barang: <span style="font-weight:normal;">@jumlahBarang</span> </p>
+                <p style="font-weight:bold;">Satuan barang: <span style="font-weight:normal;">@satuan</span> </p>
+                <p style="font-weight:bold;">Harga per satuan barang: <span
+                        style="font-weight:normal;">@hargaPerSatuan</span> </p>
+                <p style="font-weight:bold;">Diskon barang: <span style="font-weight:normal;">@diskon</span> </p>
+                <div style="background-color: #604FDD; padding:10px; width:600px; text-align:left;">
+                    <h5 style="font-weight:bold; color:white;">Total harga barang: <span
+                            style="font-weight:normal; color:white;">Rp @totalHargaBarang</span>
+                    </h5>
+                </div>
+            </div>
+        }
+    </section>
 </body>
 
 </html>

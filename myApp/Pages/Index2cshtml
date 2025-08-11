@@ -1,0 +1,89 @@
+﻿@page
+@{
+    string nama = "";
+    string alamat = "";
+    int umur = 0;
+    string nomorHp = "";
+    bool adaInput = false;
+
+    if (Request.Method == "POST")
+    {
+        nama = Request.Form["nama"];
+        alamat = Request.Form["alamat"];
+        umur = int.TryParse(Request.Form["umur"], out int u) ? u : 0;
+        nomorHp = Request.Form["nomorHp"];
+        adaInput = true;
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        input,
+        textarea {
+            padding: 5px;
+            width: 300px;
+        }
+
+        button {
+            padding: 8px 15px;
+            background: #007ACC;
+            color: white;
+            border: none;
+            cursor:
+                pointer;
+        }
+
+        button:hover {
+            background: #005a9e;
+        }
+    </style>
+    <title>Form Input Data Diri</title>
+</head>
+
+<body>
+    <h2>Form Input Data Diri</h2>
+    <form action="" method="post">
+        <div style="margin-bottom : 10px;">
+            <label for="">Nama</label><br>
+            <input type="text" name="nama" value="@nama" required>
+        </div>
+
+        <div style="margin-bottom : 10px;">
+            <label for="">Alamat:</label><br>
+            <textarea name="alamat" rows="3" required>@alamat</textarea>
+        </div>
+        <div style="margin-bottom : 10px;">
+            <label for="">Umur:</label><br>
+            <input type="number" name="umur" value="@umur" required>
+        </div>
+
+        <div style="margin-bottom : 10px;">
+            <label for="">Nomor HP:</label><br>
+            <input type="text" name="nomorHp" value="@nomorHp" required>
+        </div>
+
+        <button type="submit">Kirim</button>
+    </form>
+
+    @if (adaInput)
+    {
+        <hr />
+        <h3>Data yang Anda Masukkan:</h3>
+        <p><strong>Nama:</strong> @nama</p>
+        <p><strong>Alamat:</strong> @alamat</p>
+        <p><strong>Umur:</strong> @umur</p>
+        <p><strong> Nomor HP:</strong> @nomorHp</p>
+    }
+</body>
+
+</html>
